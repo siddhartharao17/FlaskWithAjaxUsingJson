@@ -1,29 +1,45 @@
-from flask import Flask, render_template, request, json, jsonify
+from flask import Flask, json, jsonify, request
+from middleware_db import ConnectDB
+import ast
 
 app = Flask(__name__)
+connObj = ConnectDB()   # Obtain a DB connection enabled object
 
-# func() to handle a request sent on end point /
+
 @app.route('/')
 def homepage():
-    return "Welcome to Python Flask"
+    return "Welcome to SHIELD!"
 
-# func() to handle a request sent on end point /signUp
-@app.route('/signUp')
-def signUp():
-    return render_template('signUp.html')
+@app.route('/get_profile', methods=['POST'])
+def getProfile():
+    userID = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    resultSet = connObj.NewSelect('customer', userID)
+    if not resultSet:
+        empty = {
+            "":""
+        }
+    success = {
+        "message":str(resultSet)
+    }
+    return jsonify(success)
 
-# func() to handle a request sent on end point /signUpUser
-@app.route('/signUpUser', methods=['POST'])
-def signUpUser():
-    # print request.form
-    user = request.form['username']
-    password = request.form['password']
-    jsonStr = json.dumps({
-        'status':'OK',
-        'user':user,
-        'password':password
-    })
-    return jsonify(jsonStr)
+@app.route('/create_update_profile', methods=['POST'])
+def createORupdate():
+    # For posting form data to DB
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    resultSet = connObj.NewUpdate('customer', data)
+    # print resultSet
+    if resultSet:
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+    success = {
+        "message": "Your profile has been updated successfully!"
+    }
+    return jsonify(success)
+
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
+
