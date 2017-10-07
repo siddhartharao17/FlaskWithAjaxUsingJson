@@ -58,25 +58,29 @@ class ConnectDB:
 
 # New SELECT FUNC --authored by Sid
     def NewSelect(self, table, dictionary=None):
-        fetch_mult = True
-        if dictionary == None and fetch_mult == True:
-            query = "SELECT * FROM %s;" % table
-            self.cursor.execute(query)
-            result = self.cursor.fetchall()
-            return result
+        try:
+            fetch_mult = True
+            query = ""
+            if dictionary == None and fetch_mult == True:
+                query = "SELECT * FROM %s;" % table
 
-        # WHERE clause
-        if dictionary:
-            # if len(dictionary) == 1:
-            where_exp = self.prepDict(dictionary)
-            query = "SELECT * FROM %s WHERE %s;" % (table, where_exp)
+            # WHERE clause
+            if dictionary:
+                # if len(dictionary) == 1:
+                where_exp = self.prepWhereDict(dictionary)
+                query = "SELECT * FROM %s WHERE %s;" % (table, where_exp)
+                # print query
+
             # print query
             self.cursor.execute(query)
             result = self.cursor.fetchall()
             return result
+        except MySQLdb.Error:
+            print MySQLdb.Error
+            return 'error'
 
     # we check that there is a non-zero length dictionary
-    def prepDict(self, dictionary):
+    def prepWhereDict(self, dictionary):
         if len(dictionary):
             where_exp = []
             for key in dictionary:
@@ -84,7 +88,7 @@ class ConnectDB:
             # print where_exp
             return " AND ".join(where_exp)
 
-# -- Ends Select--
+# -- Ends Select --
 
 # New Update func --authored by Sid
     def NewUpdate(self, table, dictionary):
@@ -106,6 +110,25 @@ class ConnectDB:
             return result
         except MySQLdb.Error:
             print MySQLdb.Error
-            return 1
+            return 'error'
 
 # -- Ends Update --
+
+# New Insert func --authored by Sid
+    def NewInsert(self, table, dictionary):
+        try:
+            cols_part = []
+            vals_part = []
+            for key in dictionary:
+                cols_part.append(key)
+                vals_part.append("'%s'" % dictionary[key])
+            query = "INSERT INTO %s (%s) VALUES (%s);" % (table, ", ".join(cols_part), ", ".join(vals_part))
+            print query
+            self.cursor.execute(query)
+            self.conn.commit()
+            result = self.cursor.fetchall()
+            return result
+        except MySQLdb.Error:
+            print MySQLdb.Error
+            return 'error'
+# -- Ends Insert --
