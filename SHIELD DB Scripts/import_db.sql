@@ -86,12 +86,12 @@ CREATE TABLE `customer` (
   `login_source` varchar(145) DEFAULT NULL,
   `email_id` varchar(145) NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
-  `last_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
   `address` varchar(45) DEFAULT NULL,
   `street` varchar(45) DEFAULT NULL,
   `state` varchar(45) DEFAULT NULL,
-  `zip` varchar(45) NOT NULL,
-  `country` varchar(45) NOT NULL,
+  `zip` varchar(45) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`u_id`),
   UNIQUE KEY `Username_UNIQUE` (`username`),
   UNIQUE KEY `u_id_UNIQUE` (`u_id`),
@@ -105,7 +105,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com',NULL,'John','abcd sdsb ','some street ','NJ','07333','USA');
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com',NULL,'John','abcd sdsb ','some street ','NJ','07333','');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,4 +353,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-06 13:53:51
+-- Dump completed on 2017-10-06 20:08:57
