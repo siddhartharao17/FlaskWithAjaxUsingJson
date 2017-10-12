@@ -105,7 +105,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com',NULL,'John','abcd sdsb ','some street ','NJ','07333','');
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,16 +177,15 @@ DROP TABLE IF EXISTS `keylog`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `keylog` (
   `u_id` int(50) DEFAULT NULL,
-  `keylog_date_time` datetime DEFAULT NULL,
+  `keylog_timestamp` varchar(100) DEFAULT NULL,
   `application_name` varchar(255) DEFAULT NULL,
   `log_text` varchar(2000) DEFAULT NULL,
   `notification_id` varchar(45) DEFAULT NULL,
-  `key_log_id` int(100) NOT NULL AUTO_INCREMENT,
-  `unique_identifieri` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`key_log_id`),
-  UNIQUE KEY `key_log_id_UNIQUE` (`key_log_id`),
-  KEY `login_keylog_u_id_idx` (`u_id`),
-  CONSTRAINT `login_keylog_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `keylog_id` int(100) NOT NULL AUTO_INCREMENT,
+  `unique_identifier` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`keylog_id`),
+  UNIQUE KEY `key_log_id_UNIQUE` (`keylog_id`),
+  KEY `login_keylog_u_id_idx` (`u_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -353,4 +352,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-06 20:08:57
+-- Dump completed on 2017-10-12 16:15:20

