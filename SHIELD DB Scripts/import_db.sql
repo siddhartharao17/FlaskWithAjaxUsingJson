@@ -105,7 +105,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','');
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA'),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA'),(30,'johnd','something_new',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,6 +137,35 @@ CREATE TABLE `feature` (
 LOCK TABLES `feature` WRITE;
 /*!40000 ALTER TABLE `feature` DISABLE KEYS */;
 /*!40000 ALTER TABLE `feature` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feature_info`
+--
+
+DROP TABLE IF EXISTS `feature_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feature_info` (
+  `mac_address` varchar(255) DEFAULT NULL,
+  `u_id` int(50) NOT NULL,
+  `subscribed_feature_ids` varchar(255) DEFAULT NULL,
+  `installer_id` varchar(35) NOT NULL,
+  `profile_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`profile_id`),
+  UNIQUE KEY `mac_address_UNIQUE` (`mac_address`),
+  KEY `login_userprofile_u_id_idx` (`u_id`),
+  CONSTRAINT `login_userprofile_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feature_info`
+--
+
+LOCK TABLES `feature_info` WRITE;
+/*!40000 ALTER TABLE `feature_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `feature_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -183,10 +212,11 @@ CREATE TABLE `keylog` (
   `notification_id` varchar(45) DEFAULT NULL,
   `keylog_id` int(100) NOT NULL AUTO_INCREMENT,
   `unique_identifier` varchar(100) DEFAULT NULL,
+  `img` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`keylog_id`),
   UNIQUE KEY `key_log_id_UNIQUE` (`keylog_id`),
   KEY `login_keylog_u_id_idx` (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +225,7 @@ CREATE TABLE `keylog` (
 
 LOCK TABLES `keylog` WRITE;
 /*!40000 ALTER TABLE `keylog` DISABLE KEYS */;
-INSERT INTO `keylog` VALUES (2,'2017-05-08 01:32:32','Untitled - Notepad','this is raw data from notpad','0',1,'2847daf13b52c1fe955236fcf6ad5575'),(2,'2017-05-08 01:36:42','untitled  - Sublime Text (UNREGISTERED)','i am typing on a different editor','0',2,'2847daf13b52c1fe955236fcf6ad2254'),(2,'2017-05-07 01:22:55','Untitled - Notepad','asd@gmail.com is my gmail id ','0',3,'2847daf99b58c3hh112233fcf6ad2254'),(1,'2017-05-07 01:19:42','Microsoft Word','jai@gmail.com','0',4,'2847daf99b58c3hh112233fcf6ad2254'),(1,'2017-05-07 03:55:42','Firefox','google.com','0',5,'2847daf99b58c3hh112233fcf6ad0099'),(1,'2017-05-06 03:22:42','Untitled - Notepad','raw data from notepad','0',6,'2847daf99b58c3hh112233fcf6ad7653'),(1,'2017-05-06 06:12:42','Microsoft Excel','i am typing my userid- 011 and password- 398772262','0',7,'2847daf99b58c3hh112233fcf6ad1100'),(3,'2017-05-03 05:15:22','untitled  - Sublime Text (UNREGISTERED)','parth@gmail.com is my gmail id.   ','0',8,'0077daf99b58c3hh112233fcf6d7709'),(3,'2017-05-03 08:12:42','Firefox','google.com','0',9,'8700daf99b58c3hh112233fcf6ad1000'),(3,'2017-05-03 09:52:42','Microsoft Word','i am typing on microsoft word and trying to open a new file','0',10,'5654daf99b58c3hh675432fcf6ad0954'),(4,'2017-05-02 08:42:42','Untitled Notepad','this is raw data from notepad','0',11,'2847daf99b58c3hh0010124fcf6ad8632'),(4,'2017-05-02 05:32:42','Mysql Workbench','trying to view and open the existing database so that i can edit the database i want to ','0',12,'1247daf99b58c3hh0099001fcf6ad8632'),(4,'2017-05-01 07:11:42','Chrome','msn.com','0',13,'0987daf99b58c3hh9813425fcf6ad8632'),(4,'2017-05-01 06:24:42','Microsoft Explorer','facebook.com','0',14,'1817daf99b58c3hh8984512fcf6am2798'),(5,'2017-04-28 01:55:42','untitled  - Sublime Text (UNREGISTERED)','typing on notepad ++ to save the email and password','0',15,'5989daf99b58c3hh010122fcf6as1989'),(5,'2017-04-27 02:23:42','Untitled - Notepad','raw data from notepad','0',16,'5647daf99b58c3hh0976543fcf6am0887'),(5,'2017-04-27 01:11:12','Firefox','open settings and delete cookie','0',17,'1091daf99b58c3lp0987142fcf6am2291');
+INSERT INTO `keylog` VALUES (2,'2017-05-08 01:32:32','Untitled - Notepad','this is raw data from notpad','0',1,'2847daf13b52c1fe955236fcf6ad5575','notepad'),(2,'2017-05-08 01:36:42','untitled  - Sublime Text (UNREGISTERED)','i am typing on a different editor','0',2,'2847daf13b52c1fe955236fcf6ad2254','sublimetxt'),(2,'2017-05-07 01:22:55','Untitled - Notepad','asd@gmail.com is my gmail id ','0',3,'2847daf99b58c3hh112233fcf6ad2254','notepad'),(1,'2017-05-07 01:19:42','Microsoft Word','jai@gmail.com','0',4,'2847daf99b58c3hh112233fcf6ad2254','msword'),(1,'2017-05-07 03:55:42','Firefox','google.com','0',5,'2847daf99b58c3hh112233fcf6ad0099','firefox'),(1,'2017-05-06 03:22:42','Untitled - Notepad','raw data from notepad','0',6,'2847daf99b58c3hh112233fcf6ad7653','notepad'),(1,'2017-05-06 06:12:42','Microsoft Excel','i am typing my userid- 011 and password- 398772262','0',7,'2847daf99b58c3hh112233fcf6ad1100','msexcel'),(3,'2017-05-03 05:15:22','untitled  - Sublime Text (UNREGISTERED)','parth@gmail.com is my gmail id.   ','0',8,'0077daf99b58c3hh112233fcf6d7709','sublimetxt'),(3,'2017-05-03 08:12:42','Firefox','google.com','0',9,'8700daf99b58c3hh112233fcf6ad1000','firefox'),(3,'2017-05-03 09:52:42','Microsoft Word','i am typing on microsoft word and trying to open a new file','0',10,'5654daf99b58c3hh675432fcf6ad0954','msword'),(4,'2017-05-02 08:42:42','Untitled Notepad','this is raw data from notepad','0',11,'2847daf99b58c3hh0010124fcf6ad8632','notepad'),(4,'2017-05-02 05:32:42','Mysql Workbench','trying to view and open the existing database so that i can edit the database i want to ','0',12,'1247daf99b58c3hh0099001fcf6ad8632','workbench'),(4,'2017-05-01 07:11:42','Chrome','msn.com','0',13,'0987daf99b58c3hh9813425fcf6ad8632','chrome'),(4,'2017-05-01 06:24:42','Microsoft Explorer','facebook.com','0',14,'1817daf99b58c3hh8984512fcf6am2798','iexplorer'),(5,'2017-04-28 01:55:42','untitled  - Sublime Text (UNREGISTERED)','typing on notepad ++ to save the email and password','0',15,'5989daf99b58c3hh010122fcf6as1989','sublimetxt'),(5,'2017-04-27 02:23:42','Untitled - Notepad','raw data from notepad','0',16,'5647daf99b58c3hh0976543fcf6am0887','notepad'),(5,'2017-04-27 01:11:12','Firefox','open settings and delete cookie','0',17,'1091daf99b58c3lp0987142fcf6am2291','firefox');
 /*!40000 ALTER TABLE `keylog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -278,42 +308,6 @@ LOCK TABLES `smart_lock` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_profile`
---
-
-DROP TABLE IF EXISTS `user_profile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_profile` (
-  `first_name` char(100) NOT NULL,
-  `last_name` char(100) DEFAULT NULL,
-  `mac_address` varchar(255) DEFAULT NULL,
-  `u_id` int(50) NOT NULL,
-  `subscribed_feature_ids` varchar(255) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `street` varchar(50) DEFAULT NULL,
-  `state` char(50) DEFAULT NULL,
-  `zip` int(5) DEFAULT NULL,
-  `country` char(50) DEFAULT NULL,
-  `installer_id` varchar(35) NOT NULL,
-  `profile_id` varchar(45) NOT NULL,
-  PRIMARY KEY (`first_name`,`profile_id`),
-  UNIQUE KEY `mac_address_UNIQUE` (`mac_address`),
-  KEY `login_userprofile_u_id_idx` (`u_id`),
-  CONSTRAINT `login_userprofile_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_profile`
---
-
-LOCK TABLES `user_profile` WRITE;
-/*!40000 ALTER TABLE `user_profile` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_profile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `webcam_capture`
 --
 
@@ -330,7 +324,7 @@ CREATE TABLE `webcam_capture` (
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_webcamcapture_u_id_idx` (`u_id`),
   CONSTRAINT `login_webcamcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `profile_mac_address` FOREIGN KEY (`mac_address`) REFERENCES `user_profile` (`mac_address`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `profile_mac_address` FOREIGN KEY (`mac_address`) REFERENCES `feature_info` (`mac_address`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -352,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-12 16:15:20
+-- Dump completed on 2017-10-18 17:00:14

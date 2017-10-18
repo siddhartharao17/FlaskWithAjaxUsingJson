@@ -102,13 +102,35 @@ def getKeyLogs(user_id):
             "log_text": record[3],
             "notification_id": record[4],
             "keylog_id": record[5],
-            "unique_identifier": record[6]
+            "unique_identifier": record[6],
+            "img": record[7]
         }
         resultSetArray.append(recordJson)
     success = {
         "message":resultSetArray
     }
     # print resultSet
+    return jsonify(success)
+
+# Endpoint to change password
+@app.route('/change_pass', methods = ['POST'])
+def changePass():
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    # print data
+    data = {
+        "u_id": data["u_id"],
+        "password": data["new_pass"]
+    }
+    resultSet = connObj.NewUpdate('customer', data)
+
+    if resultSet == 'error':
+        error = {
+            "message": "Error."
+        }
+        return jsonify(error)
+    success = {
+        "message": "Your password has been updated successfully!"
+    }
     return jsonify(success)
 
 
