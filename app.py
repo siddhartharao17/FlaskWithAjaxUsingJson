@@ -58,7 +58,8 @@ def getProfile():
             "street": resultSet[0][9],
             "state": resultSet[0][10],
             "zip": resultSet[0][11],
-            "country": resultSet[0][12]
+            "country": resultSet[0][12],
+            "contact_number": resultSet[0][13]
         }
     }
     print resultSet
