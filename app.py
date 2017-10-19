@@ -118,11 +118,26 @@ def getKeyLogs(user_id):
 def changePass():
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     # print data
-    data = {
+# Check if the old password given is valid
+    dataToCheck = {
+        "u_id": data["u_id"],
+        "password": data["old_pass"]
+    }
+
+    entry = connObj.NewSelect('customer', dataToCheck)
+    if len(entry) == 0:
+        invalid = {
+        "message": "Invalid Old Password."
+        }
+        return jsonify(invalid)
+
+# Continue to update new password
+    dataToUpdate = {
         "u_id": data["u_id"],
         "password": data["new_pass"]
     }
-    resultSet = connObj.NewUpdate('customer', data)
+
+    resultSet = connObj.NewUpdate('customer', dataToUpdate)
 
     if resultSet == 'error':
         error = {
