@@ -4,4 +4,4 @@ This is a sample project that demonstrates a flask application as a serverused w
 Use the link for step-by-step detailed understanding: http://codehandbook.org/python-flask-jquery-ajax-post/
 
 # Edit
-This repo contains the code for project SHIELD-backend. SHIELD is our project for course "CS Project II" in Sem 3 at Pace University, NYC
+This repo contains the backend code for project SHIELD. SHIELD is our project for course "CS Project II" in Sem 3 at Pace University, NYC
