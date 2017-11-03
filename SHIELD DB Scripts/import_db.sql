@@ -57,7 +57,7 @@ CREATE TABLE `credit_card` (
   `cc_type` varchar(256) DEFAULT NULL,
   `security_code` varchar(256) DEFAULT NULL,
   `cc_name` varchar(50) DEFAULT NULL,
-  `cc_exdate` date DEFAULT NULL,
+  `cc_exdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`cc_number`),
   KEY `login_cc_u_id_idx` (`u_id`),
   CONSTRAINT `login_cc_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -70,6 +70,7 @@ CREATE TABLE `credit_card` (
 
 LOCK TABLES `credit_card` WRITE;
 /*!40000 ALTER TABLE `credit_card` DISABLE KEYS */;
+INSERT INTO `credit_card` VALUES (1,'222222222222222222','ww','222','dd','2/2019'),(4,'4867866786876876666','visa','5555','puneet','8/2019');
 /*!40000 ALTER TABLE `credit_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,4 +350,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-03  1:28:43
+-- Dump completed on 2017-11-03 18:40:14
