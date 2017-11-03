@@ -1,11 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `shield` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `shield`;
-
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: shield
 -- ------------------------------------------------------
--- Server version	5.7.19-log
+-- Server version	5.7.20-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -59,6 +56,8 @@ CREATE TABLE `credit_card` (
   `cc_number` varchar(256) NOT NULL,
   `cc_type` varchar(256) DEFAULT NULL,
   `security_code` varchar(256) DEFAULT NULL,
+  `cc_name` varchar(50) DEFAULT NULL,
+  `cc_exdate` date DEFAULT NULL,
   PRIMARY KEY (`cc_number`),
   KEY `login_cc_u_id_idx` (`u_id`),
   CONSTRAINT `login_cc_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -350,4 +349,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-18 17:00:14
+-- Dump completed on 2017-11-03  1:28:43
