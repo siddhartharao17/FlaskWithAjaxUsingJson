@@ -102,6 +102,27 @@ def updatePayments():
     }
     return jsonify(success)
 
+# Endpoint for getting logged in user's payment info
+@app.route('/get_payments', methods=['POST'])
+def getPayments():
+    userID = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    resultSet = connObj.NewSelect('credit_card', userID)
+    if resultSet == 'error':
+        error = {
+            "message":"Error"
+        }
+        return jsonify(error)
+    success = {
+         "message": {
+            "u_id": resultSet[0][0],
+            "cc_number":resultSet[0][1],
+             "cc_name": resultSet[0][4],
+            "cc_exdate": resultSet[0][5],
+         }
+    }
+    print resultSet
+    return jsonify(success)
+
 # Endpoint to fetch keylog data
 @app.route('/getKeylogData/<user_id>', methods = ['GET'])
 def getKeyLogs(user_id):
