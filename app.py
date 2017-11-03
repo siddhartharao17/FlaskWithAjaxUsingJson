@@ -98,7 +98,7 @@ def updatePayments():
         return jsonify(error)
 
     success = {
-        "message": "Payment updated successfully lalalallalalaalaala !"
+        "message": "Payment updated successfully !"
     }
     return jsonify(success)
 
