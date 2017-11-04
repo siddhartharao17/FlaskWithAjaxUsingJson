@@ -22,6 +22,7 @@ def login_check():
         "username":username,
         "password":password
     }
+
     resultSet = connObj.NewSelect('customer', login_json)
     if resultSet == 'error':
         error = {
@@ -29,12 +30,9 @@ def login_check():
         }
         return jsonify(error)
     success = {
-        "message": {
-            "u_id":resultSet[0][0]
-        }
-    }
+        "message": { "u_id": resultSet[0][0]}}
     # print resultSet
-    return  jsonify(success)
+    return jsonify(success)
 
 
 # Endpoint for getting logged in user's profile
@@ -86,9 +84,19 @@ def createORupdate():
 # Endpoint for creating/updating payments
 @app.route('/create_update_payments', methods=['POST'])
 def updatePayments():
-    # For posting form data to DB
+
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    resultSet = connObj.NewInsert('credit_card', data)
+    # get uid and check if the table already contains u_id,
+    # if yes, data will be updated, if no data will be inserted
+    datatemp = {"u_id": data['u_id']}
+    resultSet = connObj.NewSelect('credit_card', datatemp)
+
+    if resultSet.__len__() == 0:
+        resultSet = connObj.NewInsert('credit_card', data)
+    else:
+        resultSet = connObj.NewUpdate('credit_card', data)
+
+
     print resultSet
     # print resultSet
     if resultSet == 'error':
@@ -107,15 +115,14 @@ def updatePayments():
 def getPayments():
     userID = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     resultSet = connObj.NewSelect('credit_card', userID)
-    if resultSet == 'error':
-        error = {
-            "message":"Error"
-        }
+    if resultSet == 'error' or resultSet.__len__() == 0:
+        error = {"message":"Error"}
         return jsonify(error)
     success = {
          "message": {
             "u_id": resultSet[0][0],
             "cc_number":resultSet[0][1],
+             "cc_type": resultSet[0][2],
              "cc_name": resultSet[0][4],
             "cc_exdate": resultSet[0][5],
          }
