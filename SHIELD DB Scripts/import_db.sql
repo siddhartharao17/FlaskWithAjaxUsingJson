@@ -53,13 +53,14 @@ DROP TABLE IF EXISTS `credit_card`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `credit_card` (
   `u_id` int(50) NOT NULL,
-  `cc_number` varchar(256) NOT NULL,
+  `cc_number` varchar(256) NOT NULL DEFAULT '0',
   `cc_type` varchar(256) DEFAULT NULL,
   `security_code` varchar(256) DEFAULT NULL,
   `cc_name` varchar(50) DEFAULT NULL,
   `cc_exdate` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`cc_number`),
   KEY `login_cc_u_id_idx` (`u_id`),
+  CONSTRAINT `credit_card_ibfk_1` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`),
   CONSTRAINT `login_cc_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -70,7 +71,7 @@ CREATE TABLE `credit_card` (
 
 LOCK TABLES `credit_card` WRITE;
 /*!40000 ALTER TABLE `credit_card` DISABLE KEYS */;
-INSERT INTO `credit_card` VALUES (1,'222222222222222222','ww','222','dd','2/2019'),(4,'4867866786876876666','visa','5555','puneet','8/2019');
+INSERT INTO `credit_card` VALUES (3,'4222222222222222222','visa','2222','dddddddddd','2/2019'),(30,'4333333332333335645','visa','2222','kaur','2/2019'),(1,'4333333333333333333','visa','3333','hgehjwge','3/2019'),(2,'4355677896789076','visa','1111','Test User 1','03/2019'),(4,'5644475676864566778','discover','2222','varad shere','2/2222');
 /*!40000 ALTER TABLE `credit_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +110,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','434555322'),(2,'siddo','sid','934839hhg','','sid@gmail.com','Sid','R','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA',NULL),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA',NULL),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL);
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','434555322'),(2,'test_user1','123','934839hhg','','test_user1@shield.com','User1','Test','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA','3333'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA',NULL),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -220,7 +221,7 @@ CREATE TABLE `keylog` (
   PRIMARY KEY (`keylog_id`),
   UNIQUE KEY `key_log_id_UNIQUE` (`keylog_id`),
   KEY `login_keylog_u_id_idx` (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,8 +328,7 @@ CREATE TABLE `webcam_capture` (
   PRIMARY KEY (`webcam_id`),
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_webcamcapture_u_id_idx` (`u_id`),
-  CONSTRAINT `login_webcamcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `profile_mac_address` FOREIGN KEY (`mac_address`) REFERENCES `feature_info` (`mac_address`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `login_webcamcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -338,6 +338,7 @@ CREATE TABLE `webcam_capture` (
 
 LOCK TABLES `webcam_capture` WRITE;
 /*!40000 ALTER TABLE `webcam_capture` DISABLE KEYS */;
+INSERT INTO `webcam_capture` VALUES (1,'2017-05-07 03:55:42','1','2','55'),(1,'2017-05-07 03:55:42','1','22','552');
 /*!40000 ALTER TABLE `webcam_capture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -350,4 +351,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-03 18:40:14
+-- Dump completed on 2017-11-08 11:25:17
