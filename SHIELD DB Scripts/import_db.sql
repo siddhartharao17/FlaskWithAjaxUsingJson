@@ -141,6 +141,7 @@ CREATE TABLE `feature` (
 
 LOCK TABLES `feature` WRITE;
 /*!40000 ALTER TABLE `feature` DISABLE KEYS */;
+INSERT INTO `feature` VALUES ('1','web cam capture',1000,'web cam capture',1);
 /*!40000 ALTER TABLE `feature` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,6 +326,7 @@ CREATE TABLE `webcam_capture` (
   `image_id` varchar(50) DEFAULT NULL,
   `webcam_id` varchar(45) NOT NULL,
   `mac_address` varchar(255) DEFAULT NULL,
+  `image_url` longtext,
   PRIMARY KEY (`webcam_id`),
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_webcamcapture_u_id_idx` (`u_id`),
@@ -338,7 +340,7 @@ CREATE TABLE `webcam_capture` (
 
 LOCK TABLES `webcam_capture` WRITE;
 /*!40000 ALTER TABLE `webcam_capture` DISABLE KEYS */;
-INSERT INTO `webcam_capture` VALUES (1,'2017-05-07 03:55:42','1','2','55'),(1,'2017-05-07 03:55:42','1','22','552');
+INSERT INTO `webcam_capture` VALUES (1,'2017-05-07 03:55:42','1','2','55',NULL),(1,'2017-05-07 03:55:42','1','22','552',NULL),(3,'2017-05-07 03:55:42','9999','9','2',NULL);
 /*!40000 ALTER TABLE `webcam_capture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -351,4 +353,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-08 11:25:17
+-- Dump completed on 2017-11-09  9:23:12
