@@ -291,7 +291,7 @@ def getWebCam(user_id):
 # # Endpoint to return image file for webcam url
 @app.route('/getWebCamImages', methods = ['POST'])
 def getWebCamImages():
-
+    # import pdb; pdb.set_trace()
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     path_file = data['image_url']
     print path_file
@@ -303,7 +303,9 @@ def getWebCamImages():
     base64_bytes = b64encode(byte_content)
     # print base64_bytes
     # now: encoding the data to json
-    json_data = dumps(base64_bytes)
+    print base64_bytes
+    json_data = base64_bytes
+    # print json_data
     # end
     resultSetArray = []
     resultSetArray.append(json_data)

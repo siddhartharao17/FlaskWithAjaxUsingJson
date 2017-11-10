@@ -104,6 +104,7 @@ class ConnectDB:
                     " %s " \
                     "WHERE %s;" % (table, ", ".join(set_part), where_part)
             # print query
+            print query
             self.cursor.execute(query)
             self.conn.commit()
             result = self.cursor.fetchall()
@@ -131,4 +132,5 @@ class ConnectDB:
         except MySQLdb.Error:
             print MySQLdb.Error
             return 'error'
+
 # -- Ends Insert --
