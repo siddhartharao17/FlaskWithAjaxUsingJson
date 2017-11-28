@@ -5,12 +5,24 @@ import os
 from base64 import b64encode
 from json import dumps
 from PIL import Image
+from flask_mail import Mail, Message
 
 from datetime import datetime
 import ast  # used to convert json object from <unicode> to <dict> type
 app = Flask(__name__)
 connObj = ConnectDB()   # Obtain a DB connection enabled object.
                         # This obj will come from middleware_db.py file
+
+app.config.update(
+   #EMAIL SETTINGS
+   MAIL_SERVER='smtp.gmail.com',
+   MAIL_PORT=465,
+   MAIL_USE_SSL=True,
+   MAIL_USERNAME = 'shieldintrusionsystem@gmail.com',
+   MAIL_PASSWORD = 'shieldteam1'
+   )
+
+mail = Mail(app)
 
 # Endpoint for SHIELD Homepage
 @app.route('/')
@@ -226,6 +238,8 @@ def update_key_logs():
     success = {
         "message": "Success"
     }
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    sendAlert(person)
     return jsonify(success)
 
 
@@ -260,6 +274,8 @@ def insert_webcam_capture():
     success = {
         "message": "Success"
     }
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    sendAlert(person)
     return jsonify(success)
 
 # here
@@ -315,6 +331,36 @@ def getWebCamImages():
     # print resultSet
     return jsonify(success)
 
+# Function to send email.
+def sendAlert(data):
+    try:
+        msg = Message("Intrusion Detected",
+                      sender="shieldintrusionsystem@gmail.com",
+                      recipients=[data['email']])
+        msg.body = data['message']
+        # msg.html = render_template('mails/alert.html')
+        msg.html = '<!DOCTYPE html>' \
+                   '<html>' \
+                   '<head> ' \
+                   '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">' \
+                   '</head>' \
+                   '<body>' \
+                   '<div class="container" style="border:1px solid; border-radius:20px; padding:30px">' \
+                   '<h3>Hello ' + data['name'] + ',</h3> ' \
+                                                 '<p>An intrusion was detected on your computer. ' \
+                                                 'Please login into your account to view what was ' \
+                                                 'captured during the attempt.</p>' \
+                                                 '<p>Take Care,</p>' \
+                                                 '<p>SHIELD</p>' \
+                                                 '<img class="logo"src="https://images.vexels.com/media/users/3/142812/isolated/preview/992801ae3182fa95353e941cfcac9293-shield-logo-emblem-design-by-vexels.png"' \
+                                                 'style="height:40px">' \
+                                                 '</div>' \
+                                                 '</body>' \
+                                                 '</html>'
+        mail.send(msg)
+        return 'Mail sent!'
+    except Exception, e:
+        return str(e)   
 # Testing code block
 # Testing SELECT function
 # @app.route('/test_select', methods=['POST'])
