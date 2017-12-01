@@ -419,6 +419,97 @@ def getWebCamImages():
     # print resultSet
     return jsonify(success)
 
+
+# screenshot
+
+# Endpoint for api request and inserting screenshot capture in database
+@app.route('/update_scrshot_capture/', methods=['POST'])
+def insert_scrShot_capture():
+    #  print data_temp
+    # For fetching form request(images) sent by host
+    file = request.files['media']
+
+    # use uid_timestamp.png as a file name
+    # if image folder is not there create one
+    if not path.exists('ScrShot_Images\\\\'):
+        os.makedirs('ScrShot_Images\\\\')
+    file_name = (file.filename).split('.')[0]
+    file_type =(file.filename).split('.')[1]
+    imgurl = 'ScrShot_Images\\\\' + file_name+'.'+file_type
+    # print imgurl
+    file.save(imgurl)
+    # add images url to db
+    now = datetime.now()
+    # print now.strftime("%Y-%m-%d %H:%M:%S")
+    data = {"u_id": 1,"image_url":imgurl,"scrshot_date_time":now.strftime("%Y-%m-%d %H:%M:%S")}
+    # print data
+    resultSet = connObj.NewInsert('scrshot_capture', data)
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+
+    success = {
+        "message": "Success"
+    }
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    sendAlert(person)
+    return jsonify(success)
+
+# here
+# Endpoint to fetch webcam data and display to user
+@app.route('/getScrCapData/<user_id>', methods = ['GET'])
+def getScrShot(user_id):
+    data = {"u_id":user_id}
+    resultSet = connObj.NewSelect('scrshot_capture', data)
+    if resultSet == 'error':
+        error = {
+            "message": "Error."
+        }
+        return jsonify(error)
+
+    resultSetArray = []
+    for record in resultSet:
+        recordJson = {
+            "u_id": record[0],
+            "scrshot_date_time": record[1],
+            "image_url": record[5],
+        }
+        resultSetArray.append(recordJson)
+    success = {
+        "message":resultSetArray
+    }
+    # print resultSet
+    return jsonify(success)
+
+# # Endpoint to return image file for webcam url
+@app.route('/getScrCapImages', methods = ['POST'])
+def getScrShotImages():
+    # import pdb; pdb.set_trace()
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    path_file = data['image_url']
+    print path_file
+    with open(path_file, 'rb') as open_file:
+        byte_content = open_file.read()
+
+    # second: base64 encode read data
+    # result: bytes (again)
+    base64_bytes = b64encode(byte_content)
+    # print base64_bytes
+    # now: encoding the data to json
+    print base64_bytes
+    json_data = base64_bytes
+    # print json_data
+    # end
+    resultSetArray = []
+    resultSetArray.append(json_data)
+    success = {
+        "message":json_data
+    }
+    # print resultSet
+    return jsonify(success)
+
 # Function to send email.
 def sendAlert(data):
     try:
@@ -452,10 +543,10 @@ def sendAlert(data):
                                                  '</html>'
         mail.send(msg)
         print 'yeeehaaaaaaaaaa mail sentttttttttttttttt'
-        return 'Mail sent!'
+        # return 'Mail sent!'
     except Exception, e:
         print 'ohhhhhhhhhhhh nooooooooooooooooooooooooooooo',str(e)
-        return str(e)
+        # return str(e)
 # Testing code block
 # Testing SELECT function
 # @app.route('/test_select', methods=['POST'])
