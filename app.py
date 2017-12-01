@@ -3,26 +3,111 @@ from middleware_db import ConnectDB
 import os.path as path
 import os
 from base64 import b64encode
-from json import dumps
-from PIL import Image
+import uuid
 from flask_mail import Mail, Message
-
+from flask import Flask, session
+from flask_socketio import SocketIO, emit, send
+from flask_socketio import join_room, leave_room
+from flask_cors import CORS
 from datetime import datetime
 import ast  # used to convert json object from <unicode> to <dict> type
 app = Flask(__name__)
-connObj = ConnectDB()   # Obtain a DB connection enabled object.
-                        # This obj will come from middleware_db.py file
+CORS(app, resources={
+    r'/api/*': {
+        'origins': '*',
+        'allow_headers': ['Content-Type', 'Authorization']
+    }
+},supports_credentials=True)
 
-app.config.update(
-   #EMAIL SETTINGS
-   MAIL_SERVER='smtp.gmail.com',
-   MAIL_PORT=465,
-   MAIL_USE_SSL=True,
-   MAIL_USERNAME = 'shieldintrusionsystem@gmail.com',
-   MAIL_PASSWORD = 'shieldteam1'
-   )
+# Obtain a DB connection enabled object.
+# This obj will come from middleware_db.py file
+connObj = ConnectDB()
+# socketio chat
+app.config['SECRET_KEY'] = 'secret!'
+
+socketio = SocketIO(app)
+
+# allow connection....
+# chat endpoints
+messages = [{}]
+users = {}
+
+room = ''
 
 mail = Mail(app)
+userlist = []
+
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', 'http://localhost:9001')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  response.headers.add('Access-Control-Allow-Credentials', 'true')
+  return response
+
+
+@socketio.on('join')
+def on_join(data):
+    print 'i am heree'
+
+    global room
+    room = data['room']
+    print room
+    join_room(room)
+    # send(room)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    emit(username + ' has left the room.', room=room)
+
+
+@socketio.on('connect')
+def makeConnection():
+    print 'connected--'
+    session['uuid'] = uuid.uuid1()
+    session['username'] = 'New User'
+    print session['uuid']
+    # emit('connect')
+
+
+@socketio.on('message')
+def new_message(message):
+    print 'you have received a new message'
+
+    print 'number of users', users.__len__()
+    print users
+    username = users[session['uuid']]['username']
+
+    print 'users are ',username
+    tmp = {'text': message,'name': users[session['uuid']]['username']}
+    print tmp
+    print 'whaaaaaaat',room
+    messages.append(tmp)
+    emit('message',tmp, broadcast=True)
+
+
+
+@socketio.on('identify')
+def on_identify(message):
+
+    print 'identify '+message
+    users[session['uuid']]= {'username': message}
+    print message
+    print users[session['uuid']]['username']
+    if not userlist.__contains__(message):
+        userlist.append(message)
+    print userlist
+    temp = {'user': userlist}
+    emit('userlist', temp)
+
+@app.route('/chat_main')
+def mainIndex():
+    print 'running main index'
+   # return app.send_static_file('index.html')
 
 # Endpoint for SHIELD Homepage
 @app.route('/')
@@ -48,14 +133,17 @@ def login_check():
         }
         return jsonify(error)
     success = {
-        "message": { "u_id": resultSet[0][0]}}
+        "message": { "u_id": resultSet[0][0], "username": resultSet[0][1]}}
     # print resultSet
+
     return jsonify(success)
 
 
 # Endpoint for getting logged in user's profile
 @app.route('/get_profile', methods=['POST'])
 def getProfile():
+
+
     userID = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     resultSet = connObj.NewSelect('customer', userID)
     if resultSet == 'error':
@@ -334,10 +422,15 @@ def getWebCamImages():
 # Function to send email.
 def sendAlert(data):
     try:
+
+        print 'inside send alert'
         msg = Message("Intrusion Detected",
                       sender="shieldintrusionsystem@gmail.com",
                       recipients=[data['email']])
+        print 'msg works '
         msg.body = data['message']
+        print 'body works '
+        print msg.body
         # msg.html = render_template('mails/alert.html')
         msg.html = '<!DOCTYPE html>' \
                    '<html>' \
@@ -358,9 +451,11 @@ def sendAlert(data):
                                                  '</body>' \
                                                  '</html>'
         mail.send(msg)
+        print 'yeeehaaaaaaaaaa mail sentttttttttttttttt'
         return 'Mail sent!'
     except Exception, e:
-        return str(e)   
+        print 'ohhhhhhhhhhhh nooooooooooooooooooooooooooooo',str(e)
+        return str(e)
 # Testing code block
 # Testing SELECT function
 # @app.route('/test_select', methods=['POST'])
@@ -398,5 +493,6 @@ def sendAlert(data):
 # -- Testing bloack ends --
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    socketio.run(app, debug=True)
 
