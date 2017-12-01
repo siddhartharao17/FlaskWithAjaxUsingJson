@@ -71,7 +71,7 @@ CREATE TABLE `credit_card` (
 
 LOCK TABLES `credit_card` WRITE;
 /*!40000 ALTER TABLE `credit_card` DISABLE KEYS */;
-INSERT INTO `credit_card` VALUES (3,'4222222222222222222','visa','2222','dddddddddd','2/2019'),(30,'4333333332333335645','visa','2222','kaur','2/2019'),(1,'4333333333333333333','visa','3333','hgehjwge','3/2019'),(2,'4355677896789076','visa','1111','Test User 1','03/2019'),(4,'5644475676864566778','discover','2222','varad shere','2/2222');
+INSERT INTO `credit_card` VALUES (3,'4222222222222222222','visa','2222','dddddddddd','2/2019'),(2,'4263873876384673573','visa','1111','Test User 1','3/2019'),(30,'4333333332333335645','visa','2222','kaur','2/2019'),(1,'4867823532893787253','visa','1223','hgehjwge','3/2019'),(4,'5644475676864566778','discover','2222','varad shere','2/2222');
 /*!40000 ALTER TABLE `credit_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,6 +97,7 @@ CREATE TABLE `customer` (
   `zip` varchar(45) DEFAULT NULL,
   `country` varchar(45) DEFAULT NULL,
   `contact_number` varchar(20) DEFAULT NULL,
+  `role` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`u_id`),
   UNIQUE KEY `Username_UNIQUE` (`username`),
   UNIQUE KEY `u_id_UNIQUE` (`u_id`),
@@ -110,7 +111,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','434555322'),(2,'test_user1','123','934839hhg','','test_user1@shield.com','User1','Test','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL),(4,'varad','varad','32904872f',NULL,'varad@gmail.com','Varad','Shere','Jersey City','53 Water St','NJ','07306','USA','3333'),(5,'prateek','prateek','34874wkfh',NULL,'prateek@gmail.om','Prateek','Vaidya','Jersey City','55 River St','NJ','07310','USA',NULL),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL);
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','4345553275',NULL),(2,'test_user1','123','934839hhg','','test_user1@shield.com','User1','Test','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL,'user'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL,NULL),(4,'shield_support','123','32904872f',NULL,'shield_support','Support User1','Shere','Jersey City','53 Water St','NJ','07306','USA','3333',NULL),(5,'support1','123','34874wkfh',NULL,'support@gmail.om','support','user','New York','55 River St','NY','07310','USA',NULL,'support'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL,NULL);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,6 +262,36 @@ LOCK TABLES `notification` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `scrshot_capture`
+--
+
+DROP TABLE IF EXISTS `scrshot_capture`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scrshot_capture` (
+  `u_id` int(50) DEFAULT NULL,
+  `scrshot_date_time` datetime DEFAULT NULL,
+  `image_id` varchar(50) DEFAULT NULL,
+  `scrshot_id` int(11) NOT NULL AUTO_INCREMENT,
+  `mac_address` varchar(255) DEFAULT NULL,
+  `image_url` longtext,
+  PRIMARY KEY (`scrshot_id`),
+  KEY `profile_mac_address_idx` (`mac_address`),
+  KEY `login_scrshotcapture_u_id_idx` (`u_id`),
+  CONSTRAINT `login_scrshotcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `scrshot_capture`
+--
+
+LOCK TABLES `scrshot_capture` WRITE;
+/*!40000 ALTER TABLE `scrshot_capture` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scrshot_capture` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `smart_device`
 --
 
@@ -324,14 +355,14 @@ CREATE TABLE `webcam_capture` (
   `u_id` int(50) DEFAULT NULL,
   `webcam_date_time` datetime DEFAULT NULL,
   `image_id` varchar(50) DEFAULT NULL,
-  `webcam_id` varchar(45) NOT NULL,
+  `webcam_id` int(11) NOT NULL AUTO_INCREMENT,
   `mac_address` varchar(255) DEFAULT NULL,
   `image_url` longtext,
   PRIMARY KEY (`webcam_id`),
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_webcamcapture_u_id_idx` (`u_id`),
   CONSTRAINT `login_webcamcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -340,7 +371,7 @@ CREATE TABLE `webcam_capture` (
 
 LOCK TABLES `webcam_capture` WRITE;
 /*!40000 ALTER TABLE `webcam_capture` DISABLE KEYS */;
-INSERT INTO `webcam_capture` VALUES (1,'2017-05-07 03:55:42','1','2','55',NULL),(1,'2017-05-07 03:55:42','1','22','552',NULL),(3,'2017-05-07 03:55:42','9999','9','2',NULL);
+INSERT INTO `webcam_capture` VALUES (1,'2017-11-10 00:11:34',NULL,17,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-11-33.png'),(1,'2017-11-10 00:12:55',NULL,18,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-12-54.png'),(1,'2017-11-10 00:16:51',NULL,19,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-16-49.png'),(1,'2017-11-10 00:17:51',NULL,20,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-17-50.png'),(1,'2017-11-10 17:40:17',NULL,21,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-40-16.png'),(1,'2017-11-10 17:44:09',NULL,22,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-41-40.png'),(1,'2017-11-10 17:44:10',NULL,23,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-42-12.png');
 /*!40000 ALTER TABLE `webcam_capture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -353,4 +384,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-09  9:23:12
+-- Dump completed on 2017-12-01 13:27:55
