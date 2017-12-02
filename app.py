@@ -33,6 +33,14 @@ messages = [{}]
 users = {}
 
 room = ''
+app.config.update(
+   #EMAIL SETTINGS
+   MAIL_SERVER='smtp.gmail.com',
+   MAIL_PORT=465,
+   MAIL_USE_SSL=True,
+   MAIL_USERNAME = '',
+   MAIL_PASSWORD = ''
+   )
 
 mail = Mail(app)
 userlist = []
@@ -166,6 +174,9 @@ def getProfile():
             "contact_number": resultSet[0][13]
         }
     }
+
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
+    sendAlert(person)
     print resultSet
     return jsonify(success)
 
@@ -326,7 +337,7 @@ def update_key_logs():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
     sendAlert(person)
     return jsonify(success)
 
@@ -362,7 +373,7 @@ def insert_webcam_capture():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
     sendAlert(person)
     return jsonify(success)
 
@@ -453,7 +464,7 @@ def insert_scrShot_capture():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4"}
+    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
     sendAlert(person)
     return jsonify(success)
 
@@ -512,6 +523,7 @@ def getScrShotImages():
 
 # Function to send email.
 def sendAlert(data):
+    print data['email']
     try:
 
         print 'inside send alert'
@@ -521,7 +533,7 @@ def sendAlert(data):
         print 'msg works '
         msg.body = data['message']
         print 'body works '
-        print msg.body
+        # print msg.body
         # msg.html = render_template('mails/alert.html')
         msg.html = '<!DOCTYPE html>' \
                    '<html>' \
