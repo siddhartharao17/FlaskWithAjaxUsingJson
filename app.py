@@ -56,11 +56,8 @@ def after_request(response):
 
 @socketio.on('join')
 def on_join(data):
-    print 'i am heree'
-
     global room
     room = data['room']
-    print room
     join_room(room)
     # send(room)
 
@@ -75,25 +72,16 @@ def on_leave(data):
 
 @socketio.on('connect')
 def makeConnection():
-    print 'connected--'
     session['uuid'] = uuid.uuid1()
     session['username'] = 'New User'
-    print session['uuid']
     # emit('connect')
 
 
 @socketio.on('message')
 def new_message(message):
-    print 'you have received a new message'
-
-    print 'number of users', users.__len__()
     print users
     username = users[session['uuid']]['username']
-
-    print 'users are ',username
     tmp = {'text': message,'name': users[session['uuid']]['username']}
-    print tmp
-    print 'whaaaaaaat',room
     messages.append(tmp)
     emit('message',tmp, broadcast=True)
 
@@ -102,20 +90,15 @@ def new_message(message):
 @socketio.on('identify')
 def on_identify(message):
 
-    print 'identify '+message
+    # print 'identify '+message
     users[session['uuid']]= {'username': message}
-    print message
-    print users[session['uuid']]['username']
+    # print message
+    # print users[session['uuid']]['username']
     if not userlist.__contains__(message):
         userlist.append(message)
-    print userlist
+    # print userlist
     temp = {'user': userlist}
     emit('userlist', temp)
-
-@app.route('/chat_main')
-def mainIndex():
-    print 'running main index'
-   # return app.send_static_file('index.html')
 
 # Endpoint for SHIELD Homepage
 @app.route('/')
@@ -174,10 +157,9 @@ def getProfile():
             "contact_number": resultSet[0][13]
         }
     }
-
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
-    sendAlert(person)
-    print resultSet
+    # uncomment below code to enable notifications
+    # person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
+    # sendAlert(person)
     return jsonify(success)
 
 # Endpoint for creating/updating user profile
@@ -214,7 +196,7 @@ def updatePayments():
         resultSet = connObj.NewUpdate('credit_card', data)
 
 
-    print resultSet
+    # print resultSet
     # print resultSet
     if resultSet == 'error':
         error = {
@@ -244,7 +226,7 @@ def getPayments():
             "cc_exdate": resultSet[0][5],
          }
     }
-    print resultSet
+    # print resultSet
     return jsonify(success)
 
 # Endpoint to fetch keylog data
@@ -409,7 +391,7 @@ def getWebCamImages():
     # import pdb; pdb.set_trace()
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     path_file = data['image_url']
-    print path_file
+    # print path_file
     with open(path_file, 'rb') as open_file:
         byte_content = open_file.read()
 
@@ -418,7 +400,7 @@ def getWebCamImages():
     base64_bytes = b64encode(byte_content)
     # print base64_bytes
     # now: encoding the data to json
-    print base64_bytes
+
     json_data = base64_bytes
     # print json_data
     # end
@@ -500,7 +482,6 @@ def getScrShotImages():
     # import pdb; pdb.set_trace()
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
     path_file = data['image_url']
-    print path_file
     with open(path_file, 'rb') as open_file:
         byte_content = open_file.read()
 
@@ -509,7 +490,6 @@ def getScrShotImages():
     base64_bytes = b64encode(byte_content)
     # print base64_bytes
     # now: encoding the data to json
-    print base64_bytes
     json_data = base64_bytes
     # print json_data
     # end
@@ -521,20 +501,16 @@ def getScrShotImages():
     # print resultSet
     return jsonify(success)
 
+
 # Function to send email.
 def sendAlert(data):
-    print data['email']
     try:
 
-        print 'inside send alert'
         msg = Message("Intrusion Detected",
                       sender="shieldintrusionsystem@gmail.com",
                       recipients=[data['email']])
-        print 'msg works '
+
         msg.body = data['message']
-        print 'body works '
-        # print msg.body
-        # msg.html = render_template('mails/alert.html')
         msg.html = '<!DOCTYPE html>' \
                    '<html>' \
                    '<head> ' \
@@ -554,11 +530,10 @@ def sendAlert(data):
                                                  '</body>' \
                                                  '</html>'
         mail.send(msg)
-        print 'yeeehaaaaaaaaaa mail sentttttttttttttttt'
-        # return 'Mail sent!'
+
     except Exception, e:
-        print 'ohhhhhhhhhhhh nooooooooooooooooooooooooooooo',str(e)
-        # return str(e)
+        print 'exception from send alert',str(e)
+
 # Testing code block
 # Testing SELECT function
 # @app.route('/test_select', methods=['POST'])
