@@ -157,9 +157,6 @@ def getProfile():
             "contact_number": resultSet[0][13]
         }
     }
-    # uncomment below code to enable notifications
-    # person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
-    # sendAlert(person)
     return jsonify(success)
 
 # Endpoint for creating/updating user profile
@@ -319,8 +316,9 @@ def update_key_logs():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
-    sendAlert(person)
+    # uncomment below code to enable notifications
+    # person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
+    # sendAlert(person)
     return jsonify(success)
 
 
@@ -355,8 +353,9 @@ def insert_webcam_capture():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
-    sendAlert(person)
+    # uncomment below code to enable notifications
+    # person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
+    # sendAlert(person)
     return jsonify(success)
 
 # here
@@ -446,8 +445,9 @@ def insert_scrShot_capture():
     success = {
         "message": "Success"
     }
-    person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
-    sendAlert(person)
+    # uncomment below code to enable notifications
+    # person = {"email": "shielduser4@gmail.com", "name": "test_user4", "message": "hi"}
+    # sendAlert(person)
     return jsonify(success)
 
 # here
