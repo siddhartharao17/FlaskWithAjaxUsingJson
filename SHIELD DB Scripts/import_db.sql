@@ -98,6 +98,8 @@ CREATE TABLE `customer` (
   `country` varchar(45) DEFAULT NULL,
   `contact_number` varchar(20) DEFAULT NULL,
   `role` varchar(10) DEFAULT NULL,
+  `subscription_type` varchar(45) DEFAULT NULL,
+  `subscribed_on` datetime DEFAULT NULL,
   PRIMARY KEY (`u_id`),
   UNIQUE KEY `Username_UNIQUE` (`username`),
   UNIQUE KEY `u_id_UNIQUE` (`u_id`),
@@ -111,7 +113,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','4345553275',NULL),(2,'test_user1','123','934839hhg','','test_user1@shield.com','User1','Test','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL,'user'),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL,NULL),(4,'shield_support','123','32904872f',NULL,'shield_support','Support User1','Shere','Jersey City','53 Water St','NJ','07306','USA','3333',NULL),(5,'support1','123','34874wkfh',NULL,'support@gmail.om','support','user','New York','55 River St','NY','07310','USA',NULL,'support'),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL,NULL);
+INSERT INTO `customer` VALUES (1,'nikhil','nikhil','qerf349843','','nikhil@gmail.com','Nikhil','Mulik','Jersey City','82 Wheeler Ave','NJ','07306','USA','4345553275','user','Basic','2017-11-01 11:00:00'),(2,'test_user1','123','934839hhg','','test_user1@shield.com','User1','Test','Jersey City','123 Bleeker Ave','NJ','07308','USA',NULL,'user','Basic',NULL),(3,'tony','tony','30284jjgge',NULL,'tony@gmail.com','Tony','XYZ ','Jersey City','230 Logan Ave','NY','10038','USA',NULL,NULL,NULL,NULL),(4,'support','123','32904872f',NULL,'shield_support','Support User1','Shere','Jersey City','53 Water St','NJ','07306','USA','3333',NULL,NULL,NULL),(5,'support1','123','34874wkfh',NULL,'support@gmail.om','support','user','New York','55 River St','NY','07310','USA',NULL,'support',NULL,NULL),(30,'johnd','12345',NULL,NULL,'johnd@gmail.com','John','Doe','abcd sdsb ','some street ','NJ','07333','',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,6 +130,7 @@ CREATE TABLE `feature` (
   `price` double DEFAULT NULL,
   `description` varchar(50) DEFAULT NULL,
   `u_id` int(50) DEFAULT NULL,
+  `is_subscribed` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`feature_id`),
   UNIQUE KEY `feature_id_UNIQUE` (`feature_id`),
   KEY `loginfeature u_id_idx` (`feature_id`,`u_id`),
@@ -142,7 +145,7 @@ CREATE TABLE `feature` (
 
 LOCK TABLES `feature` WRITE;
 /*!40000 ALTER TABLE `feature` DISABLE KEYS */;
-INSERT INTO `feature` VALUES ('1','web cam capture',1000,'web cam capture',1);
+INSERT INTO `feature` VALUES ('1','Web Cam Capture',1000,'web cam capture',1,'false'),('2','Key Log',1500,'Key Log',1,'true'),('3','Screenshot',1000,'Screenshot',1,'true'),('4','Remote Lock',2000,'Remote Lock',1,'false');
 /*!40000 ALTER TABLE `feature` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,7 +282,7 @@ CREATE TABLE `scrshot_capture` (
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_scrshotcapture_u_id_idx` (`u_id`),
   CONSTRAINT `login_scrshotcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,6 +291,7 @@ CREATE TABLE `scrshot_capture` (
 
 LOCK TABLES `scrshot_capture` WRITE;
 /*!40000 ALTER TABLE `scrshot_capture` DISABLE KEYS */;
+INSERT INTO `scrshot_capture` VALUES (1,'2017-12-01 17:18:26',NULL,24,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-18-25.png'),(1,'2017-12-01 17:19:27',NULL,25,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-19-25.png'),(1,'2017-12-01 17:20:28',NULL,26,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-20-26.png'),(1,'2017-12-01 17:21:28',NULL,27,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-21-27.png'),(1,'2017-12-01 17:22:29',NULL,28,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-22-27.png'),(1,'2017-12-01 17:23:29',NULL,29,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-23-28.png'),(1,'2017-12-01 17:24:29',NULL,30,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-24-28.png'),(1,'2017-12-01 17:25:30',NULL,31,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-25-29.png'),(1,'2017-12-01 17:26:30',NULL,32,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-26-29.png'),(1,'2017-12-01 17:27:31',NULL,33,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-27-30.png'),(1,'2017-12-01 17:28:31',NULL,34,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-28-30.png'),(1,'2017-12-01 17:36:46',NULL,35,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-36-45.png'),(1,'2017-12-01 17:37:46',NULL,36,NULL,'ScrShot_Images\\myScreen_Dec_01_2017_17-37-45.png');
 /*!40000 ALTER TABLE `scrshot_capture` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +366,7 @@ CREATE TABLE `webcam_capture` (
   KEY `profile_mac_address_idx` (`mac_address`),
   KEY `login_webcamcapture_u_id_idx` (`u_id`),
   CONSTRAINT `login_webcamcapture_u_id` FOREIGN KEY (`u_id`) REFERENCES `customer` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,7 +375,7 @@ CREATE TABLE `webcam_capture` (
 
 LOCK TABLES `webcam_capture` WRITE;
 /*!40000 ALTER TABLE `webcam_capture` DISABLE KEYS */;
-INSERT INTO `webcam_capture` VALUES (1,'2017-11-10 00:11:34',NULL,17,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-11-33.png'),(1,'2017-11-10 00:12:55',NULL,18,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-12-54.png'),(1,'2017-11-10 00:16:51',NULL,19,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-16-49.png'),(1,'2017-11-10 00:17:51',NULL,20,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-17-50.png'),(1,'2017-11-10 17:40:17',NULL,21,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-40-16.png'),(1,'2017-11-10 17:44:09',NULL,22,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-41-40.png'),(1,'2017-11-10 17:44:10',NULL,23,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-42-12.png');
+INSERT INTO `webcam_capture` VALUES (1,'2016-08-10 00:11:34',NULL,17,NULL,'Webcam_Images\\intrusion_Aug_10_2016_00-11-33.png'),(1,'2017-01-10 00:12:55',NULL,18,NULL,'Webcam_Images\\intrusion_Jan_10_2017_00-12-54.png'),(1,'2017-11-10 00:16:51',NULL,19,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-16-49.png'),(1,'2017-11-10 00:17:51',NULL,20,NULL,'Webcam_Images\\intrusion_Nov_10_2017_00-17-50.png'),(1,'2017-11-10 17:40:17',NULL,21,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-40-16.png'),(1,'2017-11-10 17:44:09',NULL,22,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-41-40.png'),(1,'2017-11-10 17:44:10',NULL,23,NULL,'Webcam_Images\\intrusion_Nov_10_2017_17-42-12.png'),(1,'2016-11-10 17:44:10',NULL,24,NULL,'Webcam_Images\\intrusion_Nov_10_2016_17-42-12.png'),(1,'2017-05-10 17:44:10',NULL,25,NULL,'Webcam_Images\\intrusion_May_10_2017_17-44-10.png'),(1,'2017-05-10 17:44:23',NULL,26,NULL,'Webcam_Images\\intrusion_May_10_2017_17-44-23.png'),(1,'2016-11-10 17:44:10',NULL,27,NULL,'Webcam_Images\\intrusion_Nov_10_2016_17-44-10.png'),(1,'2016-11-10 17:44:13',NULL,28,NULL,'Webcam_Images\\intrusion_Nov_10_2016_17-42-13.png');
 /*!40000 ALTER TABLE `webcam_capture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -384,4 +388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-01 13:27:55
+-- Dump completed on 2017-12-14  2:46:55
