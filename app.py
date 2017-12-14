@@ -154,7 +154,9 @@ def getProfile():
             "state": resultSet[0][10],
             "zip": resultSet[0][11],
             "country": resultSet[0][12],
-            "contact_number": resultSet[0][13]
+            "contact_number": resultSet[0][13],
+            "subscription_type": resultSet[0][15],
+            "subscribed_on": resultSet[0][16]
         }
     }
     return jsonify(success)
@@ -533,6 +535,52 @@ def sendAlert(data):
 
     except Exception, e:
         print 'exception from send alert',str(e)
+
+# Endpoint for getting logged in user's subscribed features
+@app.route('/get_features', methods=['POST'])
+def getfeatures():
+
+        userID = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+        resultSet = connObj.NewSelect('feature', userID)
+        if resultSet == 'error':
+            error = {
+                "message": "Error."
+            }
+            return jsonify(error)
+
+        resultSetArray = []
+        for record in resultSet:
+            recordJson = {
+                "feature_name": record[1],
+                "is_subscribed": record[5],
+            }
+            resultSetArray.append(recordJson)
+        success = {
+            "message": resultSetArray
+        }
+        # print resultSet
+        return jsonify(success)
+
+# Endpoint for creating/updating user profile
+@app.route('/update_features', methods=['POST'])
+def updateFeatures():
+    # For posting form data to DB
+    resultSet=''
+    data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
+    for record in data:
+        print record
+       # resultSet = connObj.NewUpdate('feature', record)
+    # print resultSet
+    if resultSet == 'error':
+        error = {
+            "message": "Error"
+        }
+        return jsonify(error)
+
+    success = {
+        "message": "Features have been updated successfully!"
+    }
+    return jsonify(success)
 
 # Testing code block
 # Testing SELECT function
