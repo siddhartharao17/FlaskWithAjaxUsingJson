@@ -565,11 +565,15 @@ def getfeatures():
 @app.route('/update_features', methods=['POST'])
 def updateFeatures():
     # For posting form data to DB
+    record = {}
     resultSet=''
     data = ast.literal_eval(json.dumps(request.json, ensure_ascii=False))
-    for record in data:
-        print record
-       # resultSet = connObj.NewUpdate('feature', record)
+    # print data
+    for k in data['features']:
+        resultSet = connObj.NewUpdate('feature', k)
+
+
+
     # print resultSet
     if resultSet == 'error':
         error = {
